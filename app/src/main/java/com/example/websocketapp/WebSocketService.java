@@ -76,6 +76,7 @@ public class WebSocketService extends Service {
                         //  RequestStatus status = pago.requestForSales(actividad, apiKey, monto, CurrencyType.PESO, flavor);
                         if (Settings.canDrawOverlays(context)) {
                             Intent intent = new Intent(context, FloatingWindowService.class);
+                            intent.putExtra("AMOUNT",monto);
                             startService(intent);
                         }
                         webSocket.send("PAYMENT:1");

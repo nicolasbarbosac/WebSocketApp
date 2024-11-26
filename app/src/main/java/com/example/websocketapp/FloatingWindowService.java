@@ -8,13 +8,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.LifecycleService;
 
@@ -26,8 +30,30 @@ public class FloatingWindowService extends LifecycleService {
 
     private WindowManager windowManager;
     private View floatingView;
+String amount="";
+    @Override
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+         super.onStartCommand(intent, flags, startId);
+        if (intent != null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null)
+            {
+                amount= extras.getString("AMOUNT");
+                Log.d("FloatingWindowService--**--",amount);
 
 
+                Intent intentSale = new Intent(this, StartSaleActivity.class);
+                intentSale.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                Log.d("AMOUNT --**--",amount);
+                intentSale.putExtra("AMOUNT", amount);
+                startActivity(intentSale);
+
+                stopSelf();
+            }
+        }
+        return START_STICKY;
+    }
 
     @Override
     public void onCreate() {
@@ -68,16 +94,7 @@ public class FloatingWindowService extends LifecycleService {
         // Configurar el botón de cierre en la ventana flotante
         Button closeButton = floatingView.findViewById(R.id.close_button);
         closeButton.setOnClickListener(v -> stopSelf());  // Detener el servicio al cerrar
-        Intent intent = new Intent(this, StartSaleActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
 
-        stopSelf();
-        // Iniciar el servicio como un Foreground Service
-      //  startForeground(1, createNotification());
-
-//        Activity activity = (Activity)this;
-//        RequestStatus status = pago.requestForSales(context, apiKey, "500", CurrencyType.PESO, flavor);
     }
 
     @Override
@@ -94,22 +111,5 @@ public class FloatingWindowService extends LifecycleService {
         return null;
     }
 
-    private Notification createNotification() {
-        // Crear un canal de notificación (para versiones >= Oreo)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    "floating_window_channel",
-                    "Floating Window Service",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
 
-        // Crear la notificación asociada con el servicio en primer plano
-        return new NotificationCompat.Builder(this, "floating_window_channel")
-                .setContentTitle("Servicio en primer plano")
-                .setContentText("La ventana flotante está activa.")
-                .setSmallIcon(R.drawable.ic_launcher_background)  // Asegúrate de tener un ícono
-                .build();
-    }
 }

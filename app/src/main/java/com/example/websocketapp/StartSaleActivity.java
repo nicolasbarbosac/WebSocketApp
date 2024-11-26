@@ -32,7 +32,18 @@ public class StartSaleActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_integration);
         TxtInfo= findViewById(R.id.txtInfo);
-        RequestStatus status = pago.requestForSales(this, apiKey, "500", CurrencyType.PESO, flavor);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                String amount = extras.getString("AMOUNT");
+
+                Log.d("StartSaleActivity --**--",amount);
+                RequestStatus status = pago.requestForSales(this, apiKey, amount, CurrencyType.PESO, flavor);
+            }
+        }
+
 
     }
 
