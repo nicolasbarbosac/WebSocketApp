@@ -41,10 +41,15 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnPago = findViewById(R.id.BtnPago);
         AppCompatActivity act = this;
+
+        if (!Settings.canDrawOverlays(MainActivity.this)) {
+            // Si no tiene el permiso, solicitarlo
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+            startActivityForResult(intent, REQUEST_CODE_PERMISSION);
+        }
+
         btnPago.setOnClickListener(v -> {
-            if (Settings.canDrawOverlays(MainActivity.this)) {
-                startFloatingService();
-            } else {
+            if (!Settings.canDrawOverlays(MainActivity.this)) {
                 // Si no tiene el permiso, solicitarlo
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
                 startActivityForResult(intent, REQUEST_CODE_PERMISSION);
