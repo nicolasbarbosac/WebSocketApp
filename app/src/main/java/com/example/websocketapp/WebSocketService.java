@@ -124,3 +124,20 @@ public class WebSocketService extends Service {
 
 
 }
+
+
+
+//caja
+//- compra
+//- impresion
+//backend tbk
+// intenciones - terminalID
+//    compra
+//    impresion
+//
+//pos         relación pagos 1-1
+//1. pago
+//2.
+//3.
+//
+// lista de intenciones//***

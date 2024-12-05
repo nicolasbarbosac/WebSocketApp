@@ -49,11 +49,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         btnPago.setOnClickListener(v -> {
-            if (!Settings.canDrawOverlays(MainActivity.this)) {
-                // Si no tiene el permiso, solicitarlo
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                startActivityForResult(intent, REQUEST_CODE_PERMISSION);
+            if (Settings.canDrawOverlays(this)) {
+                Intent intent = new Intent(this, FloatingWindowService.class);
+                intent.putExtra("AMOUNT","500");
+                startService(intent);
             }
+
+
+
+//            if (!Settings.canDrawOverlays(MainActivity.this)) {
+//                // Si no tiene el permiso, solicitarlo
+//                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+//                startActivityForResult(intent, REQUEST_CODE_PERMISSION);
+//            }
 //            // Iniciar el servicio flotante como servicio en primer plano
 //            Intent intent = new Intent(MainActivity.this, FloatingWindowService.class);
 //            startService(intent);
@@ -72,7 +80,23 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    public void callpago(){
+        Intent intent = new  Intent("cl.tbk.apos.dev.view.libreria.LibreriaTotalVentasActivity");
+        intent.putExtra("apiKey","RBZD25SKEATW0J070X6C");
+        intent.putExtra("APP_VA_HOME_MONTO","500");
+        intent.putExtra("APP_VA_HOME_TIPO_MONEDA",CurrencyType.PESO);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        //     intent.putExtra("","dev");
 
+
+
+//                .apply {
+//            this.putExtra(BundleKeys.API_KEY_KEY, apiKey)
+//            this.putExtra(BundleKeys.SALES_AMOUNT_KEY, amount)//TODO: Agregar formateador antes de enviar
+//            this.putExtra(BundleKeys.SALES_CURRENCY_TYPE_KEY, currencyType.getStringValue())
+//        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

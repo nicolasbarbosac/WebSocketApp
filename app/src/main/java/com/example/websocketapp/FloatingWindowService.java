@@ -31,29 +31,28 @@ public class FloatingWindowService extends LifecycleService {
     private WindowManager windowManager;
     private View floatingView;
 String amount="";
-    @Override
-    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-         super.onStartCommand(intent, flags, startId);
-        if (intent != null) {
-            Bundle extras = intent.getExtras();
-            if (extras != null)
-            {
-                amount= extras.getString("AMOUNT");
-                Log.d("FloatingWindowService--**--",amount);
-
-
-                Intent intentSale = new Intent(this, StartSaleActivity.class);
-                intentSale.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                Log.d("AMOUNT --**--",amount);
-                intentSale.putExtra("AMOUNT", amount);
-                startActivity(intentSale);
-
-                stopSelf();
-            }
-        }
-        return START_STICKY;
-    }
+//    @Override
+//    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+//         super.onStartCommand(intent, flags, startId);
+//        if (intent != null) {
+//            Bundle extras = intent.getExtras();
+//            if (extras != null)
+//            {
+//                amount= extras.getString("AMOUNT");
+//                Log.d("FloatingWindowService--**--",amount);
+//
+//
+//                Intent intentSale = new Intent(this, StartSaleActivity.class);
+//                intentSale.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                Log.d("AMOUNT --**--",amount);
+//                intentSale.putExtra("AMOUNT", amount);
+//                startActivity(intentSale);
+//
+//                stopSelf();
+//            }
+//        }
+//        return START_STICKY;
+//    }
 
     @Override
     public void onCreate() {
@@ -93,8 +92,35 @@ String amount="";
 
         // Configurar el botón de cierre en la ventana flotante
         Button closeButton = floatingView.findViewById(R.id.close_button);
-        closeButton.setOnClickListener(v -> stopSelf());  // Detener el servicio al cerrar
+        closeButton.setOnClickListener(v -> callpago());  // Detener el servicio al cerrar
 
+    }
+
+
+        String TOTAL_SALES_ACTIVITY = ".LibreriaTotalVentasActivity";
+    String REPRINT_ACTIVITY = ".LibreriaReimprimirVentaActivity";
+    String LOAD_KEYS_ACTIVITY = ".LibreriaCargaLLavesActivity";
+    String CLOSE_TERMINAL_ACTIVITY = ".LibreriaCierreTerminalActivity";
+    String SALES_ACTIVITY = ".LibreriaVentaActivity";
+    String ANNULMENT_ACTIVITY = ".LibreriaAnulacionActivity";
+    String PRINTER_ACTIVITY = ".PrinterActivity";
+
+    public void callpago(){
+        Intent intent = new  Intent("cl.tbk.apos.dev.view.libreria.LibreriaTotalVentasActivity");
+        intent.putExtra("apiKey","RBZD25SKEATW0J070X6C");
+        intent.putExtra("APP_VA_HOME_MONTO","500");
+        intent.putExtra("APP_VA_HOME_TIPO_MONEDA",CurrencyType.PESO);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+   //     intent.putExtra("","dev");
+
+
+
+//                .apply {
+//            this.putExtra(BundleKeys.API_KEY_KEY, apiKey)
+//            this.putExtra(BundleKeys.SALES_AMOUNT_KEY, amount)//TODO: Agregar formateador antes de enviar
+//            this.putExtra(BundleKeys.SALES_CURRENCY_TYPE_KEY, currencyType.getStringValue())
+//        }
     }
 
     @Override
